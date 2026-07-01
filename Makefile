@@ -68,3 +68,9 @@ docker-build:
 
 docker-validate:
 	docker run --rm -v $(PWD):/app harness-precommit:local harness-schema/v0/pipeline/examples/conditional-retry-example.yaml
+
+docker-build:
+	docker build -t harness-precommit:local .
+
+docker-run:
+	docker run --rm -v $$(pwd):/app harness-precommit:local
