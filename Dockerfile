@@ -1,13 +1,6 @@
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
-
+FROM python:3.11-slim
 WORKDIR /app
-
-COPY pyproject.toml ./
-COPY src ./src
-COPY tests ./tests
-COPY harness-schema ./harness-schema
-COPY .pre-commit-config.yaml ./
-
-RUN uv sync --dev
-
+RUN pip install uv
+COPY . .
+RUN uv pip install -e .
 ENTRYPOINT ["uv", "run", "harness-schema-hook"]
