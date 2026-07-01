@@ -1,0 +1,59 @@
+template:
+  name: Service Epsilon Pipeline
+  identifier: service_epsilon
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_epsilon
+  orgIdentifier: team_epsilon
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Scan
+          identifier: scan
+          template:
+            templateRef: account.scan_container
+            versionLabel: v1.0.0
+            templateInputs:
+              type: SecurityTests
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: trivyScan
+                        type: AquaTrivy
+                        spec:
+                          target:
+                            name: myorg/epsilon
+                            variant: latest
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_blue_green
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: epsilon-frontend
+      - stage:
+          name: Notify
+          identifier: notify
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Notify Teams Channel
+                    identifier: notifyTeamsChannel
+                    template:
+                      templateRef: account.notify_teams
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          source:
+                            spec:
+                              script: |
+                                echo "epsilon deployed"

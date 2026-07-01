@@ -1,0 +1,30 @@
+template:
+  name: Deploy Blue-Green
+  identifier: deploy_blue_green
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sBGSwapServices
+              name: Swap Services
+              identifier: swapServices
+              spec: {}
+              timeout: 10m
+        rollbackSteps:
+          - step:
+              type: K8sBGSwapServices
+              name: Swap Services Rollback
+              identifier: swapServicesRollback
+              spec:
+                isRollback: true
+              timeout: 10m

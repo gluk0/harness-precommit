@@ -1,0 +1,45 @@
+template:
+  name: Service Delta Pipeline
+  identifier: service_delta
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_delta
+  orgIdentifier: team_delta
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: DB Migration
+          identifier: dbMigration
+          template:
+            templateRef: account.run_db_migration
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+      - stage:
+          name: Health Check
+          identifier: healthCheck
+          template:
+            templateRef: account.health_check
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+      - stage:
+          name: Ticket
+          identifier: ticket
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Create Release Ticket
+                    identifier: createReleaseTicket
+                    template:
+                      templateRef: account.create_jira_ticket
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: JiraCreate
+                        spec:
+                          connectorRef: org.jira
+                          projectKey: DELTA
+                          summary: "Delta release deployed"

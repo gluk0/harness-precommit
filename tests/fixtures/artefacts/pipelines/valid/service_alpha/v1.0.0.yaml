@@ -1,0 +1,44 @@
+template:
+  name: Service Alpha Pipeline
+  identifier: service_alpha
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_alpha
+  orgIdentifier: team_alpha
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Build
+          identifier: build
+          template:
+            templateRef: account.build_docker
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: buildAndPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          connectorRef: org.ecr
+                          repo: 123456789.dkr.ecr.eu-west-1.amazonaws.com/alpha
+      - stage:
+          name: Test
+          identifier: test
+          template:
+            templateRef: account.run_unit_tests
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: test
+                        type: Run
+                        spec:
+                          connectorRef: org.k8s_connector
+                          image: node:20

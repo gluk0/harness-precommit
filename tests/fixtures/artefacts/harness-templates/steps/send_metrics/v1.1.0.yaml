@@ -1,0 +1,29 @@
+template:
+  name: Send Metrics
+  identifier: send_metrics
+  versionLabel: v1.1.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            curl -X POST http://<+input>/metrics \
+              -H "Content-Type: text/<+stage.variables.format>" \
+              -d "<+stage.variables.namespace>_deployment_count 1"
+      environmentVariables:
+        # MINOR: new optional metrics namespace.
+        - name: namespace
+          type: String
+          value: <+input>.default("app")
+        # MINOR: new optional output format.
+        - name: format
+          type: String
+          value: <+input>.default("prometheus")
+    timeout: 2m

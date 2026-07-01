@@ -1,0 +1,18 @@
+template:
+  name: Security Scan
+  identifier: security_scan
+  versionLabel: v1.0.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            echo "scanning"
+    timeout: 5m

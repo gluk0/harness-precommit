@@ -1,0 +1,23 @@
+template:
+  name: Run Gate Check
+  identifier: run_gate_check
+  versionLabel: v1.1.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            echo "gate check: <+input>"
+      environmentVariables:
+        # MINOR: new optional required flag.
+        - name: required
+          type: String
+          value: <+input>.default("true")
+    timeout: 5m

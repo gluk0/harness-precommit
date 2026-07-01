@@ -1,0 +1,16 @@
+template:
+  name: Upload Artifact
+  identifier: upload_artifact
+  versionLabel: v1.0.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: S3Upload
+    spec:
+      connectorRef: <+input>
+      region: <+input>
+      bucket: <+input>
+      sourcePath: <+input>
+    timeout: 5m

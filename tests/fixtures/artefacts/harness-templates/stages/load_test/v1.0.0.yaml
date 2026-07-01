@@ -1,0 +1,29 @@
+template:
+  name: Load Test
+  identifier: load_test
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: k6 Load Test
+              identifier: k6LoadTest
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      k6 run --vus 10 --duration 5m script.js
+              timeout: 15m
+      variables:
+        - name: targetUrl
+          type: String
+          value: <+input>

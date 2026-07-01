@@ -1,0 +1,20 @@
+template:
+  name: Notify Slack
+  identifier: notify_slack
+  versionLabel: v1.1.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            # MINOR: now supports threaded replies
+            echo "notify: <+input>"
+            echo "thread: <+input>"
+    timeout: 2m

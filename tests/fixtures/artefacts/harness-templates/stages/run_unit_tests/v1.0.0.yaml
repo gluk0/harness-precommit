@@ -1,0 +1,23 @@
+template:
+  name: Run Unit Tests
+  identifier: run_unit_tests
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: CI
+    spec:
+      cloneCodebase: true
+      execution:
+        steps:
+          - step:
+              type: Run
+              name: Test
+              identifier: test
+              spec:
+                connectorRef: <+input>
+                image: <+input>
+                command: pytest
+              timeout: 15m

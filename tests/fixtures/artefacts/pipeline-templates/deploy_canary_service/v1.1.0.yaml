@@ -1,0 +1,28 @@
+template:
+  name: Deploy Canary Service
+  identifier: deploy_canary_service
+  versionLabel: v1.1.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Canary
+          identifier: canary
+          template:
+            templateRef: account.deploy_canary
+            versionLabel: v1.1.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.serviceC>
+                variables:
+                  - name: legacyFlag
+                    type: String
+                    value: "yes"
+                  - name: trafficPct
+                    type: Number
+                    value: 10

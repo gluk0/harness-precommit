@@ -1,0 +1,29 @@
+template:
+  name: DB and Deploy
+  identifier: db_and_deploy
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Migrate DB
+          identifier: migrateDb
+          template:
+            templateRef: account.run_db_migration
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+      - stage:
+          name: Deploy App
+          identifier: deployApp
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.2.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.api>

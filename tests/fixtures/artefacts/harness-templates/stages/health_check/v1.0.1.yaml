@@ -1,0 +1,30 @@
+template:
+  name: Health Check
+  identifier: health_check
+  versionLabel: v1.0.1
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Health Check
+              identifier: healthCheck
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      for i in $(seq 1 10); do
+                        curl -sf http://<+input>/health && exit 0
+                        sleep 5
+                      done
+                      exit 1
+              # PATCH: tighter timeout.
+              timeout: 5m

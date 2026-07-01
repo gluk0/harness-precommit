@@ -1,0 +1,41 @@
+template:
+  name: Deploy Microservice
+  identifier: deploy_microservice
+  versionLabel: v1.1.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.2.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.serviceA>
+      - stage:
+          name: PostDeploy
+          identifier: postDeploy
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Notify
+                    identifier: notify
+                    template:
+                      templateRef: account.notify_slack
+                      versionLabel: v1.1.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          environmentVariables:
+                            - name: SERVICE
+                              type: String
+                              value: <+services.serviceA>

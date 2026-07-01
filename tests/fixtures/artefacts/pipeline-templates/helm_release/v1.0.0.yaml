@@ -1,0 +1,38 @@
+template:
+  name: Helm Release
+  identifier: helm_release
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Publish Chart
+          identifier: publishChart
+          template:
+            templateRef: account.publish_helm_chart
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+      - stage:
+          name: Archive
+          identifier: archive
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Upload Chart
+                    identifier: uploadChart
+                    template:
+                      templateRef: account.upload_artifact
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: S3Upload
+                        spec:
+                          connectorRef: org.aws
+                          region: eu-west-1
+                          bucket: helm-charts
+                          sourcePath: "*.tgz"

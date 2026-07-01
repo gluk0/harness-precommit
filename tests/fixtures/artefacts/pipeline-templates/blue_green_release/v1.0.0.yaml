@@ -1,0 +1,29 @@
+template:
+  name: Blue-Green Release
+  identifier: blue_green_release
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Blue-Green Deploy
+          identifier: blueGreenDeploy
+          template:
+            templateRef: account.deploy_blue_green
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.frontend>
+      - stage:
+          name: Health Check
+          identifier: healthCheck
+          template:
+            templateRef: account.health_check
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom

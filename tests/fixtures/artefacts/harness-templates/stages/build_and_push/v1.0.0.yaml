@@ -1,0 +1,24 @@
+template:
+  name: Build and Push Image
+  identifier: build_and_push
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: CI
+    spec:
+      cloneCodebase: true
+      execution:
+        steps:
+          - step:
+              type: BuildAndPushDockerRegistry
+              name: Build Push
+              identifier: buildPush
+              spec:
+                connectorRef: <+input>
+                repo: <+input>
+                tags:
+                  - <+input>
+              timeout: 25m

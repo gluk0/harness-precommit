@@ -1,0 +1,35 @@
+template:
+  name: Test and Deploy
+  identifier: test_and_deploy
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Unit Tests
+          identifier: unitTests
+          template:
+            templateRef: account.run_unit_tests
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: test
+                        type: Run
+                        spec:
+                          connectorRef: org.k8s_connector
+                          image: python:3.12
+      - stage:
+          name: Smoke
+          identifier: smoke
+          template:
+            templateRef: account.smoke_test
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom

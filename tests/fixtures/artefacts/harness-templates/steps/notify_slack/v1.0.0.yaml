@@ -1,0 +1,18 @@
+template:
+  name: Notify Slack
+  identifier: notify_slack
+  versionLabel: v1.0.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            echo "notify: <+input>"
+    timeout: 2m

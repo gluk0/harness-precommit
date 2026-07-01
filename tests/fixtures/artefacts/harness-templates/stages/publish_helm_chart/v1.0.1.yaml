@@ -1,0 +1,27 @@
+template:
+  name: Publish Helm Chart
+  identifier: publish_helm_chart
+  versionLabel: v1.0.1
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Helm Package
+              identifier: helmPackage
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      helm package . --version <+input>
+                      helm push *.tgz oci://<+input>
+              # PATCH: tighter timeout.
+              timeout: 12m

@@ -1,0 +1,16 @@
+template:
+  name: Create Jira Ticket
+  identifier: create_jira_ticket
+  versionLabel: v1.0.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: JiraCreate
+    spec:
+      connectorRef: <+input>
+      projectKey: <+input>
+      issueType: Task
+      summary: <+input>
+    timeout: 3m

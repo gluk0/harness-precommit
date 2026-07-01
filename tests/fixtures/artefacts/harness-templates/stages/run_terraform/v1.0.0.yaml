@@ -1,0 +1,21 @@
+template:
+  name: Run Terraform
+  identifier: run_terraform
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: TerraformPlan
+              name: Plan
+              identifier: tfPlan
+              spec:
+                configuration:
+                  command: Apply
+              timeout: 15m

@@ -1,0 +1,30 @@
+template:
+  name: Deploy to Kubernetes
+  identifier: deploy_to_k8s
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sRollingDeploy
+              name: Rolling Deploy
+              identifier: rollingDeploy
+              spec:
+                skipDryRun: false
+              timeout: 10m
+        rollbackSteps:
+          - step:
+              type: K8sRollingRollback
+              name: Rolling Rollback
+              identifier: rollingRollback
+              spec: {}
+              timeout: 10m

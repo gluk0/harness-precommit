@@ -1,0 +1,66 @@
+template:
+  name: Service Gamma Pipeline
+  identifier: service_gamma
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_gamma
+  orgIdentifier: team_gamma
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Build Push
+          identifier: buildPush
+          template:
+            templateRef: account.build_and_push
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: buildPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          connectorRef: org.ghcr
+                          repo: ghcr.io/org/gamma
+                          tags:
+                            - <+pipeline.sequenceId>
+      - stage:
+          name: Integration
+          identifier: integration
+          template:
+            templateRef: account.integration_test
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: integrationTests
+                        type: Run
+                        spec:
+                          connectorRef: org.k8s_connector
+                          image: python:3.11
+      - stage:
+          name: Metrics
+          identifier: metrics
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Push Deploy Metrics
+                    identifier: pushDeployMetrics
+                    template:
+                      templateRef: account.send_metrics
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          source:
+                            spec:
+                              script: |
+                                echo "gamma deployed"

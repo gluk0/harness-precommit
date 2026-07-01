@@ -1,0 +1,89 @@
+template:
+  name: CI/CD Full
+  identifier: ci_cd_full
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Build and Push
+          identifier: buildAndPushStage
+          template:
+            templateRef: account.build_and_push
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: buildPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          connectorRef: org.docker_hub
+                          repo: myorg/service
+                          tags:
+                            - latest
+      - stage:
+          name: Unit Tests
+          identifier: unitTests
+          template:
+            templateRef: account.run_unit_tests
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: test
+                        type: Run
+                        spec:
+                          connectorRef: org.k8s_connector
+                          image: python:3.12
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.1.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.service>
+      - stage:
+          name: Benchmark
+          identifier: benchmark
+          template:
+            templateRef: account.perf_benchmark
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+              variables:
+                - name: baselineRef
+                  type: String
+                  value: "v1.0.0"
+      - stage:
+          name: Metrics
+          identifier: metrics
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Push Metrics
+                    identifier: pushMetrics
+                    template:
+                      templateRef: account.send_metrics
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          source:
+                            spec:
+                              script: |
+                                echo "metrics"

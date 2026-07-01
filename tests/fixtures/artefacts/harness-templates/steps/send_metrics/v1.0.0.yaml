@@ -1,0 +1,19 @@
+template:
+  name: Send Metrics
+  identifier: send_metrics
+  versionLabel: v1.0.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            curl -X POST http://<+input>/metrics \
+              -d "deployment_count 1"
+    timeout: 2m

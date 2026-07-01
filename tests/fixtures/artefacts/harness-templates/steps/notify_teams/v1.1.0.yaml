@@ -1,0 +1,25 @@
+template:
+  name: Notify Teams
+  identifier: notify_teams
+  versionLabel: v1.1.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: ShellScript
+    spec:
+      shell: Bash
+      source:
+        type: Inline
+        spec:
+          script: |
+            curl -X POST -H 'Content-Type: application/json' \
+              -d '{"text":"<+input>","mentionUser":"<+input>"}' \
+              <+input>
+      environmentVariables:
+        # MINOR: new optional @mention user.
+        - name: mentionUser
+          type: String
+          value: <+input>.default("")
+    timeout: 2m

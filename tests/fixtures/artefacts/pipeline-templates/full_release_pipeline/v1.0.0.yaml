@@ -1,0 +1,75 @@
+template:
+  name: Full Release Pipeline
+  identifier: full_release_pipeline
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Build Image
+          identifier: buildImage
+          template:
+            templateRef: account.build_docker
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: buildAndPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          connectorRef: org.docker_hub
+                          repo: myorg/app
+      - stage:
+          name: Test
+          identifier: test
+          template:
+            templateRef: account.run_unit_tests
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: test
+                        type: Run
+                        spec:
+                          connectorRef: org.k8s_connector
+                          image: python:3.12
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.2.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.app>
+      - stage:
+          name: Notify
+          identifier: notify
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Notify Slack
+                    identifier: notifySlack
+                    template:
+                      templateRef: account.notify_slack
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          environmentVariables:
+                            - name: SERVICE
+                              type: String
+                              value: app

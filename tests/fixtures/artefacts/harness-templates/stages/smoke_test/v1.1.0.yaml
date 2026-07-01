@@ -1,0 +1,34 @@
+template:
+  name: Smoke Test
+  identifier: smoke_test
+  versionLabel: v1.1.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Smoke
+              identifier: smoke
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      curl -f <+stage.variables.endpoint>/health
+              timeout: 5m
+      variables:
+        # MINOR: new required endpoint input.
+        - name: endpoint
+          type: String
+          value: <+input>
+        # MINOR: new optional retry count.
+        - name: retries
+          type: Number
+          value: <+input>.default(3)

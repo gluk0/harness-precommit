@@ -1,0 +1,25 @@
+template:
+  name: Run DB Migration
+  identifier: run_db_migration
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Migrate
+              identifier: migrate
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      flyway migrate -url=<+input> -user=<+input> -password=<+input>
+              timeout: 30m

@@ -1,0 +1,45 @@
+template:
+  name: Canary with Gate
+  identifier: canary_with_gate
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Gate
+          identifier: gate
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Pre-deploy Gate
+                    identifier: preDeployGate
+                    template:
+                      templateRef: account.run_gate_check
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          source:
+                            spec:
+                              script: |
+                                echo "gate: prod"
+      - stage:
+          name: Canary Deploy
+          identifier: canaryDeploy
+          template:
+            templateRef: account.deploy_canary
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.svc>
+                variables:
+                  - name: trafficPct
+                    type: Number
+                    value: 10

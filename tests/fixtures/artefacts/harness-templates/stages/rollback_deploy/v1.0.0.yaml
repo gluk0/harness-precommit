@@ -1,0 +1,22 @@
+template:
+  name: Rollback Deploy
+  identifier: rollback_deploy
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sRollingRollback
+              name: Rollback
+              identifier: rollback
+              spec: {}
+              timeout: 10m

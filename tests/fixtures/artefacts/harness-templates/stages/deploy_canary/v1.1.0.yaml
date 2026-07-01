@@ -1,0 +1,38 @@
+template:
+  name: Deploy Canary
+  identifier: deploy_canary
+  versionLabel: v1.1.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sCanaryDeploy
+              name: Canary
+              identifier: canary
+              spec:
+                # MINOR: default flipped from false -> true
+                skipDryRun: <+input>.default(true)
+              timeout: 10m
+      variables:
+        # legacyFlag removed.
+        - name: trafficPct
+          type: Number
+          # MINOR: allowed set tightened (10 dropped).
+          value: <+input>.allowedValues(25,50)
+        # MINOR: new required input.
+        - name: releaseChannel
+          type: String
+          value: <+input>
+        # MINOR: new optional input with default.
+        - name: notifyOnFail
+          type: String
+          value: <+input>.default("slack")

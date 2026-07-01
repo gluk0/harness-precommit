@@ -1,0 +1,26 @@
+template:
+  name: Sign Artifact
+  identifier: sign_artifact
+  versionLabel: v1.0.1
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Cosign Sign
+              identifier: cosignSign
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      cosign sign --key <+input> <+input>
+              # PATCH: tighter timeout.
+              timeout: 8m

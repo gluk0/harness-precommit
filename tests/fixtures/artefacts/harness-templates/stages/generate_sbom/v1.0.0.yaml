@@ -1,0 +1,25 @@
+template:
+  name: Generate SBOM
+  identifier: generate_sbom
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Syft SBOM
+              identifier: syftSbom
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      syft <+input> -o spdx-json > sbom.json
+              timeout: 15m

@@ -1,0 +1,37 @@
+template:
+  name: Performance Benchmark
+  identifier: perf_benchmark
+  versionLabel: v1.1.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Run Benchmark
+              identifier: runBenchmark
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      ab -n 1000 -c 10 <+input>
+              timeout: 20m
+      variables:
+        - name: baselineRef
+          type: String
+          value: <+input>
+        # MINOR: new optional regression threshold (%).
+        - name: threshold
+          type: Number
+          value: <+input>.default(5)
+        # MINOR: new required comparison reference.
+        - name: compareWith
+          type: String
+          value: <+input>

@@ -1,0 +1,40 @@
+template:
+  name: Load Test
+  identifier: load_test
+  versionLabel: v1.1.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Custom
+    spec:
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: k6 Load Test
+              identifier: k6LoadTest
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      k6 run --vus <+stage.variables.users> \
+                        --duration <+stage.variables.duration> \
+                        --ramp-up <+stage.variables.rampUp> \
+                        script.js
+              timeout: 15m
+      variables:
+        - name: targetUrl
+          type: String
+          value: <+input>
+        # MINOR: new optional ramp-up period.
+        - name: rampUp
+          type: String
+          value: <+input>.default("30s")
+        # MINOR: new optional virtual user count.
+        - name: users
+          type: Number
+          value: <+input>.default(10)

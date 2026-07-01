@@ -1,0 +1,21 @@
+template:
+  name: Service Epsilon Pipeline - BROKEN
+  identifier: service_epsilon
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_epsilon
+  orgIdentifier: team_epsilon
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Deploy
+          identifier: deploy
+          # ERROR: Missing required template or type/spec
+      - stage:
+          name: Incomplete
+          # ERROR: Missing identifier
+          type: Custom
+          spec:
+            execution:
+              steps: null

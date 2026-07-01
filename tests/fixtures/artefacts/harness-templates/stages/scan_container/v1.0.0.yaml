@@ -1,0 +1,29 @@
+template:
+  name: Scan Container
+  identifier: scan_container
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: SecurityTests
+    spec:
+      cloneCodebase: false
+      execution:
+        steps:
+          - step:
+              type: AquaTrivy
+              name: Trivy Scan
+              identifier: trivyScan
+              spec:
+                mode: orchestration
+                config: default
+                target:
+                  type: container
+                  name: <+input>
+                  variant: <+input>
+                advanced:
+                  log:
+                    level: info
+              timeout: 20m

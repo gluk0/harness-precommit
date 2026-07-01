@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: harness-pipeline-schema-validate
+        name: Validate Harness pipeline schema
+        entry: uv run harness-schema-hook
+        language: system
+        pass_filenames: true
+        files: (\.ya?ml)$
+        exclude: ^harness-schema/

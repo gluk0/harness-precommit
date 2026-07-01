@@ -1,0 +1,67 @@
+template:
+  name: Security Hardened Deploy
+  identifier: security_hardened_deploy
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Scan
+          identifier: scan
+          template:
+            templateRef: account.scan_container
+            versionLabel: v1.0.0
+            templateInputs:
+              type: SecurityTests
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: trivyScan
+                        type: AquaTrivy
+                        spec:
+                          target:
+                            name: myorg/app
+                            variant: latest
+      - stage:
+          name: SBOM
+          identifier: sbom
+          template:
+            templateRef: account.generate_sbom
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.2.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.secure_app>
+      - stage:
+          name: Post Deploy
+          identifier: postDeploy
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Notify Teams
+                    identifier: notifyTeams
+                    template:
+                      templateRef: account.notify_teams
+                      versionLabel: v1.0.0
+                      templateInputs:
+                        type: ShellScript
+                        spec:
+                          source:
+                            spec:
+                              script: |
+                                echo "deployed secure_app"

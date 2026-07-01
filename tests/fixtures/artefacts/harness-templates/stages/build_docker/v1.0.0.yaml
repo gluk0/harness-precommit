@@ -1,0 +1,24 @@
+template:
+  name: Build Docker Image
+  identifier: build_docker
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: CI
+    spec:
+      cloneCodebase: true
+      execution:
+        steps:
+          - step:
+              type: BuildAndPushDockerRegistry
+              name: Build and Push
+              identifier: buildAndPush
+              spec:
+                connectorRef: <+input>
+                repo: <+input>
+                tags:
+                  - <+pipeline.sequenceId>
+              timeout: 20m

@@ -1,0 +1,30 @@
+template:
+  name: Deploy Canary
+  identifier: deploy_canary
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sCanaryDeploy
+              name: Canary
+              identifier: canary
+              spec:
+                skipDryRun: <+input>.default(false)
+              timeout: 10m
+      variables:
+        - name: legacyFlag
+          type: String
+          value: <+input>
+        - name: trafficPct
+          type: Number
+          value: <+input>.allowedValues(10,25,50)

@@ -1,0 +1,23 @@
+template:
+  name: Create Jira Ticket
+  identifier: create_jira_ticket
+  versionLabel: v1.1.0
+  type: Step
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: JiraCreate
+    spec:
+      connectorRef: <+input>
+      projectKey: <+input>
+      issueType: Task
+      summary: <+input>
+      fields:
+        # MINOR: new optional priority field with default.
+        - name: Priority
+          value: <+input>.default("Medium")
+        # MINOR: new optional labels field with default.
+        - name: Labels
+          value: <+input>.default("piper")
+    timeout: 3m

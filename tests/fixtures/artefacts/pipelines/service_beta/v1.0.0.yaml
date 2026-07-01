@@ -1,0 +1,29 @@
+template:
+  name: Service Beta Pipeline
+  identifier: service_beta
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_beta
+  orgIdentifier: team_beta
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.1.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: beta-api
+      - stage:
+          name: Smoke
+          identifier: smoke
+          template:
+            templateRef: account.smoke_test
+            versionLabel: v1.0.0
+            templateInputs:
+              type: Custom

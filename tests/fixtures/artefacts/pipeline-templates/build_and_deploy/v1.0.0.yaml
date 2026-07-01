@@ -1,0 +1,38 @@
+template:
+  name: Build and Deploy
+  identifier: build_and_deploy
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Build
+          identifier: build
+          template:
+            templateRef: account.build_docker
+            versionLabel: v1.0.0
+            templateInputs:
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: buildAndPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          connectorRef: org.docker_hub
+                          repo: myorg/myapp
+      - stage:
+          name: Deploy
+          identifier: deploy
+          template:
+            templateRef: account.deploy_to_k8s
+            versionLabel: v1.1.0
+            templateInputs:
+              type: Deployment
+              spec:
+                service:
+                  serviceRef: <+services.myapp>

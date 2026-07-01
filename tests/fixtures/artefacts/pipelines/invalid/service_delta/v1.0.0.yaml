@@ -1,0 +1,11 @@
+template:
+  name: Service Delta Pipeline - BROKEN
+  identifier: service_delta
+  versionLabel: v1.0.0
+  type: Pipeline
+  projectIdentifier: team_delta
+  orgIdentifier: team_delta
+  tags: {}
+  spec:
+    stages: []
+    # ERROR: Empty stages array violates schema requirement

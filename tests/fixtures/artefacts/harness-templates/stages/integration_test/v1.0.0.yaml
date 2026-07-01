@@ -1,0 +1,23 @@
+template:
+  name: Integration Test
+  identifier: integration_test
+  versionLabel: v1.0.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: CI
+    spec:
+      cloneCodebase: true
+      execution:
+        steps:
+          - step:
+              type: Run
+              name: Integration Tests
+              identifier: integrationTests
+              spec:
+                connectorRef: <+input>
+                image: <+input>
+                command: pytest -m integration
+              timeout: 30m

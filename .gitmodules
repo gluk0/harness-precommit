@@ -1,0 +1,3 @@
+[submodule "harness-schema"]
+	path = harness-schema
+	url = git@github.com:harness/harness-schema.git

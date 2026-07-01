@@ -1,0 +1,42 @@
+template:
+  name: Deploy to Kubernetes
+  identifier: deploy_to_k8s
+  versionLabel: v1.1.0
+  type: Stage
+  projectIdentifier: platform
+  orgIdentifier: platform
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Kubernetes
+      service:
+        serviceRef: <+input>
+      execution:
+        steps:
+          - step:
+              type: K8sRollingDeploy
+              name: Rolling Deploy
+              identifier: rollingDeploy
+              spec:
+                skipDryRun: false
+              timeout: 10m
+          - step:
+              type: ShellScript
+              name: Smoke Test
+              identifier: smokeTest
+              spec:
+                shell: Bash
+                source:
+                  type: Inline
+                  spec:
+                    script: |
+                      echo "smoke"
+              timeout: 5m
+        rollbackSteps:
+          - step:
+              type: K8sRollingRollback
+              name: Rolling Rollback
+              identifier: rollingRollback
+              spec: {}
+              timeout: 10m

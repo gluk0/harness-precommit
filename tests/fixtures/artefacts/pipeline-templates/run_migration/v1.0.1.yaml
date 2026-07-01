@@ -1,0 +1,35 @@
+template:
+  name: Run Migration
+  identifier: run_migration
+  versionLabel: v1.0.1
+  type: Pipeline
+  projectIdentifier: my_team
+  orgIdentifier: my_team
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: Terraform
+          identifier: terraform
+          template:
+            templateRef: account.run_terraform
+            versionLabel: v1.0.1
+            templateInputs:
+              type: Custom
+              variables:
+                - name: env
+                  type: String
+                  value: <+services.serviceB>
+      - stage:
+          name: Scan
+          identifier: scan
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    name: Security
+                    identifier: security
+                    template:
+                      templateRef: account.security_scan
+                      versionLabel: v1.0.0
