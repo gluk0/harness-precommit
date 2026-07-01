@@ -1,8 +1,10 @@
-import sys
+import pytest
 from pathlib import Path
 
-# Ensure tests can import package modules without editable install.
-ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-sys.path.insert(0, str(SRC))
- 
+@pytest.fixture
+def fixtures_dir():
+    return Path(__file__).parent / "fixtures"
+
+@pytest.fixture
+def sample_pipeline(fixtures_dir):
+    return fixtures_dir / "sample_pipeline.yaml"
