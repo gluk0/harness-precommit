@@ -1,6 +1,1 @@
-pipeline:
-  name: Broken Pipeline Example
-  projectIdentifier: demo_project
-  orgIdentifier: demo_org
-  tags: {}
-  stages: []
+invalid: yaml
